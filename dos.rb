@@ -1,0 +1,2 @@
+module DegreesOfSeparation
+end
