@@ -1,3 +1,3 @@
 guard 'rspec', :cli => '--color' do
-  watch(/^.*\.rb/) { "spec" }
+  watch(/^.*\.rb$/) { "spec" }
 end
