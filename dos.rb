@@ -20,8 +20,8 @@ class Connections
   def order(n, person)
     if n == 1
       @connections[person]
-    elsif n == 2
-      indirect_connections(person) - order(1, person) - [person]
+    else
+      indirect_connections(n-1, person) - order(n-1, person) - [person]
     end
   end
 
@@ -35,7 +35,7 @@ class Connections
     end
   end
 
-  def indirect_connections(person)
-    @connections[person].map {|other| order(1, other)}.flatten
+  def indirect_connections(n, person)
+    @connections[person].map {|other| order(n, other)}.flatten
   end
 end
