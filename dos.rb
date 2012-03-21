@@ -12,4 +12,8 @@ end
 class Connections
   def initialize(tweets)
   end
+
+  def first_order(person)
+    []
+  end
 end

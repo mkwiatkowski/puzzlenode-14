@@ -43,4 +43,16 @@ describe Connections do
       Connections.new([])
     }.should_not raise_error
   end
+
+  describe "#first_order" do
+    it "should take a person as an argument" do
+      expect {
+        Connections.new([]).first_order('bob')
+      }.should_not raise_error
+    end
+
+    it "return empty list for empty connections" do
+      Connections.new([]).first_order('bob').should == []
+    end
+  end
 end
