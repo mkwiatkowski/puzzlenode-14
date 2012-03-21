@@ -1,6 +1,6 @@
 require_relative '../dos'
 
-describe Tweet do
+describe 'Tweet' do
   let(:one_mention_tweet) { "alberta: hey @christie. what will we be reading at the book club meeting tonight?" }
   let(:zero_mentions_tweet) { "bob: They impress us ever with the conviction that one nature wrote and the same reads." }
   let(:two_mentions_tweet) { 'christie: "Every day, men and women, conversing, beholding and beholden..." /cc @alberta, @bob' }
@@ -37,7 +37,7 @@ describe Tweet do
   end
 end
 
-describe Connections do
+describe 'Connections' do
   it "should be initialized from empty list of tweets" do
     expect {
       Connections.new([])
