@@ -77,5 +77,18 @@ describe 'Connections' do
         Connections.new([t1, t2, t3]).order(1, 'christie').should == ['alberta', 'bob']
       end
     end
+
+    describe "second" do
+      it "should return empty list for empty connections" do
+        Connections.new([]).order(2, 'bob').should == []
+      end
+
+      it "should return empty list when only first-order connections are present" do
+        pending
+        t1 = mock(:author => 'bob', :mentions => ['christie'])
+        t2 = mock(:author => 'christie', :mentions => ['bob'])
+        Connections.new([t1, t2]).order(2, 'bob').should == []
+      end
+    end
   end
 end
