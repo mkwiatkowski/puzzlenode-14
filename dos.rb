@@ -18,6 +18,8 @@ class Connections
   end
 
   def first_order(person)
-    @map.fetch(person, [])
+    @map.fetch(person, []).select do |other_person|
+      @map.fetch(other_person, []).include?(person)
+    end
   end
 end

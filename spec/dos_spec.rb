@@ -60,5 +60,11 @@ describe Connections do
       t2 = mock(:author => 'christie', :mentions => ['bob'])
       Connections.new([t1, t2]).first_order('bob').should == ['christie']
     end
+
+    it "should not return people that mention someone, but doesn't get mentioned back" do
+      t1 = mock(:author => 'bob', :mentions => ['christie'])
+      t2 = mock(:author => 'christie', :mentions => ['alberta'])
+      Connections.new([t1, t2]).first_order('bob').should == []
+    end
   end
 end
