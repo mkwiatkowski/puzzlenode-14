@@ -11,15 +11,15 @@ end
 
 class Connections
   def initialize(tweets)
-    @map = tweets.inject({}) do |map, tweet|
+    @map = tweets.inject(Hash.new([])) do |map, tweet|
       map[tweet.author] = tweet.mentions
       map
     end
   end
 
   def first_order(person)
-    @map.fetch(person, []).select do |other_person|
-      @map.fetch(other_person, []).include?(person)
+    @map[person].select do |other_person|
+      @map[other_person].include?(person)
     end
   end
 end
