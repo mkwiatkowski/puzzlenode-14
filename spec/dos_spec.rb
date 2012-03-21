@@ -39,6 +39,8 @@ end
 
 describe Connections do
   it "should be initialized from empty list of tweets" do
-    Connections.new([])
+    expect {
+      Connections.new([])
+    }.should_not raise_error
   end
 end
