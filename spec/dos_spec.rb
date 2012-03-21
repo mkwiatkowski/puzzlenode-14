@@ -88,6 +88,13 @@ describe 'Connections' do
         t2 = mock(:author => 'christie', :mentions => ['bob'])
         Connections.new([t1, t2]).order(2, 'bob').should == []
       end
+
+      it "should return list of people connected with first-order connections" do
+        t1 = mock(:author => 'alberta', :mentions => ['christie'])
+        t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta'])
+        t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
+        Connections.new([t1, t2, t3]).order(2, 'alberta').should == ['bob']
+      end
     end
   end
 end
