@@ -17,7 +17,7 @@ class Connections
     end
   end
 
-  def first_order(person)
+  def order(n, person)
     @map[person].select do |other_person|
       @map[other_person].include?(person)
     end.sort
