@@ -84,7 +84,6 @@ describe 'Connections' do
       end
 
       it "should return empty list when only first-order connections are present" do
-        pending
         t1 = mock(:author => 'bob', :mentions => ['christie'])
         t2 = mock(:author => 'christie', :mentions => ['bob'])
         Connections.new([t1, t2]).order(2, 'bob').should == []

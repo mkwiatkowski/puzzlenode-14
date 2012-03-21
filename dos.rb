@@ -18,7 +18,11 @@ class Connections
   end
 
   def order(n, person)
-    @connections[person]
+    if n == 1
+      @connections[person]
+    elsif n == 2
+      indirect_connections(person) - order(1, person) - [person]
+    end
   end
 
   private
@@ -29,5 +33,9 @@ class Connections
       }.sort
       h.merge(author => mutual_mentions)
     end
+  end
+
+  def indirect_connections(person)
+    @connections[person].map {|other| order(1, other)}.flatten
   end
 end
