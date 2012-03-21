@@ -11,8 +11,10 @@ end
 
 class Connections
   def initialize(tweets)
-    initialize_authors_mentions(tweets)
-    initialize_first_order_connections(tweets)
+    mentions = tweets.inject({}) do |m, tweet|
+      m.merge(tweet.author => tweet.mentions)
+    end
+    @connections = first_order_connections(mentions)
   end
 
   def order(n, person)
@@ -20,22 +22,12 @@ class Connections
   end
 
   private
-  def initialize_authors_mentions(tweets)
-    @authors_mentions = tweets.inject({}) do |m, tweet|
-      m[tweet.author] = tweet.mentions
-      m
+  def first_order_connections(mentions)
+    mentions.keys.inject(Hash.new([])) do |h, author|
+      mutual_mentions = mentions[author].select { |other|
+        mentions.fetch(other, []).include?(author)
+      }.sort
+      h.merge(author => mutual_mentions)
     end
-  end
-
-  def initialize_first_order_connections(tweets)
-    @connections = tweets.map(&:author).inject(Hash.new([])) do |h, author|
-      h.merge(author => mutual_mentions(author))
-    end
-  end
-
-  def mutual_mentions(person)
-    @authors_mentions[person].select { |other_person|
-      @authors_mentions.fetch(other_person, []).include?(person)
-    }.sort
   end
 end
