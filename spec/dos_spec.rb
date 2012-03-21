@@ -51,7 +51,7 @@ describe Connections do
       }.should_not raise_error
     end
 
-    it "return empty list for empty connections" do
+    it "should return empty list for empty connections" do
       Connections.new([]).first_order('bob').should == []
     end
   end
