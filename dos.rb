@@ -11,13 +11,10 @@ end
 
 class Connections
   def initialize(tweets)
-    map = tweets.inject(Hash.new([])) do |m, tweet|
-      m[tweet.author] = tweet.mentions
-      m
-    end
+    @authors_mentions = authors_mentions_from_tweets(tweets)
     @connections = tweets.map(&:author).inject(Hash.new([])) do |h, author|
-      conn = map[author].select { |other_person|
-        map[other_person].include?(author)
+      conn = @authors_mentions[author].select { |other_person|
+        @authors_mentions.fetch(other_person, []).include?(author)
       }.sort
       h[author] = conn
       h
@@ -26,5 +23,13 @@ class Connections
 
   def order(n, person)
     @connections[person]
+  end
+
+  private
+  def authors_mentions_from_tweets(tweets)
+    tweets.inject({}) do |m, tweet|
+      m[tweet.author] = tweet.mentions
+      m
+    end
   end
 end
