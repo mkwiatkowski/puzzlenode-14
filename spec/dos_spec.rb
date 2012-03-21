@@ -66,5 +66,14 @@ describe 'Connections' do
       t2 = mock(:author => 'christie', :mentions => ['alberta'])
       Connections.new([t1, t2]).first_order('bob').should == []
     end
+
+    it "should return people that mentioned each other many times" do
+      t1 = mock(:author => 'alberta', :mentions => ['christie'])
+      t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta'])
+      t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
+      Connections.new([t1, t2, t3]).first_order('alberta').should == ['christie']
+      Connections.new([t1, t2, t3]).first_order('bob').should == ['christie']
+      Connections.new([t1, t2, t3]).first_order('christie').should == ['alberta', 'bob']
+    end
   end
 end

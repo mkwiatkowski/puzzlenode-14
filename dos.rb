@@ -20,6 +20,6 @@ class Connections
   def first_order(person)
     @map[person].select do |other_person|
       @map[other_person].include?(person)
-    end
+    end.sort
   end
 end
