@@ -36,3 +36,9 @@ describe Tweet do
     tweet.mentions.should == ['alberta', 'bob']
   end
 end
+
+describe Connections do
+  it "should be initialized from empty list of tweets" do
+    Connections.new([])
+  end
+end

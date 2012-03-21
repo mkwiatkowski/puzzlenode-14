@@ -8,3 +8,8 @@ class Tweet
     end
   end
 end
+
+class Connections
+  def initialize(tweets)
+  end
+end
