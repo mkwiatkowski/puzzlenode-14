@@ -25,6 +25,10 @@ class Connections
     end
   end
 
+  def orders(person)
+    [order(1, person), order(2, person), order(3, person)]
+  end
+
   private
   def first_order_connections(mentions)
     mentions.keys.inject(Hash.new([])) do |h, author|

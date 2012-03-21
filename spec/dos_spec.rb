@@ -107,4 +107,15 @@ describe 'Connections' do
       end
     end
   end
+
+  describe "#orders" do
+    it "should return all orders of separation for a given person" do
+      t1 = mock(:author => 'alberta', :mentions => ['christie'])
+      t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta', 'donald'])
+      t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
+      t4 = mock(:author => 'donald', :mentions => ['bob'])
+      Connections.new([t1, t2, t3, t4]).orders('alberta').should ==
+        [['christie'], ['bob'], ['donald']]
+    end
+  end
 end
