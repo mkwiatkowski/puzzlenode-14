@@ -54,5 +54,11 @@ describe Connections do
     it "should return empty list for empty connections" do
       Connections.new([]).first_order('bob').should == []
     end
+
+    it "should return people that mention each other" do
+      t1 = mock(:author => 'bob', :mentions => ['christie'])
+      t2 = mock(:author => 'christie', :mentions => ['bob'])
+      Connections.new([t1, t2]).first_order('bob').should == ['christie']
+    end
   end
 end
