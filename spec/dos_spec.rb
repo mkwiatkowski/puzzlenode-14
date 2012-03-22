@@ -70,6 +70,15 @@ describe 'TweetList' do
       TweetList.new([t1, t2, t3]).first_order_connections.should ==
         {'alberta' => ['christie'], 'bob' => ['christie'], 'christie' => ['alberta', 'bob']}
     end
+
+    it "should return merged connections from multiple tweets of the same author" do
+      t1 = mock(:author => 'bob', :mentions => ['alberta'])
+      t2 = mock(:author => 'bob', :mentions => ['alberta', 'christie'])
+      t3 = mock(:author => 'alberta', :mentions => ['bob'])
+      t4 = mock(:author => 'christie', :mentions => ['bob'])
+      TweetList.new([t1, t2, t3, t4]).first_order_connections.should ==
+        {'bob' => ['alberta', 'christie'], 'alberta' => ['bob'], 'christie' => ['bob']}
+    end
   end
 end
 

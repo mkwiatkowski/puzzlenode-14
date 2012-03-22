@@ -29,8 +29,9 @@ class TweetList
   end
 
   def mentions_from_tweets(tweets)
-    tweets.inject({}) do |m, tweet|
-      m.merge(tweet.author => tweet.mentions)
+    tweets.inject(Hash.new {[]}) do |m, tweet|
+      m[tweet.author] = (m[tweet.author] + tweet.mentions).uniq
+      m
     end
   end
 end
