@@ -16,7 +16,7 @@ class ConnectionsGraph
     @graph = first_order_connections(mentions_from_tweets(tweets))
   end
 
-  def orders_of_separation(person)
+  def degrees_of_separation(person)
     res = []
     people_so_far = Set.new
     r = [person]

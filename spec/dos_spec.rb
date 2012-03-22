@@ -46,28 +46,28 @@ describe 'ConnectionsGraph' do
 
   describe "#orders" do
     it "should return empty list for empty connections" do
-      ConnectionsGraph.new([]).orders_of_separation('bob').should == []
+      ConnectionsGraph.new([]).degrees_of_separation('bob').should == []
     end
 
     it "should not return people that mention someone, but doesn't get mentioned back" do
       t1 = mock(:author => 'bob', :mentions => ['christie'])
       t2 = mock(:author => 'christie', :mentions => ['alberta'])
-      ConnectionsGraph.new([t1, t2]).orders_of_separation('bob').should == []
+      ConnectionsGraph.new([t1, t2]).degrees_of_separation('bob').should == []
     end
 
     it "should return people that mention each other" do
       t1 = mock(:author => 'bob', :mentions => ['christie'])
       t2 = mock(:author => 'christie', :mentions => ['bob'])
-      ConnectionsGraph.new([t1, t2]).orders_of_separation('bob').should == [['christie']]
+      ConnectionsGraph.new([t1, t2]).degrees_of_separation('bob').should == [['christie']]
     end
 
     it "should return people that mentioned each other many times" do
       t1 = mock(:author => 'alberta', :mentions => ['christie'])
       t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta'])
       t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
-      ConnectionsGraph.new([t1, t2, t3]).orders_of_separation('alberta').should == [['christie'], ['bob']]
-      ConnectionsGraph.new([t1, t2, t3]).orders_of_separation('bob').should == [['christie'], ['alberta']]
-      ConnectionsGraph.new([t1, t2, t3]).orders_of_separation('christie').should == [['alberta', 'bob']]
+      ConnectionsGraph.new([t1, t2, t3]).degrees_of_separation('alberta').should == [['christie'], ['bob']]
+      ConnectionsGraph.new([t1, t2, t3]).degrees_of_separation('bob').should == [['christie'], ['alberta']]
+      ConnectionsGraph.new([t1, t2, t3]).degrees_of_separation('christie').should == [['alberta', 'bob']]
     end
 
     it "should return all orders of separation for a given person" do
@@ -75,7 +75,7 @@ describe 'ConnectionsGraph' do
       t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta', 'donald'])
       t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
       t4 = mock(:author => 'donald', :mentions => ['bob'])
-      ConnectionsGraph.new([t1, t2, t3, t4]).orders_of_separation('alberta').should ==
+      ConnectionsGraph.new([t1, t2, t3, t4]).degrees_of_separation('alberta').should ==
         [['christie'], ['bob'], ['donald']]
     end
 
@@ -84,7 +84,7 @@ describe 'ConnectionsGraph' do
       t2 = mock(:author => 'bob', :mentions => ['alberta', 'donald'])
       t3 = mock(:author => 'christie', :mentions => ['alberta'])
       t4 = mock(:author => 'donald', :mentions => ['bob'])
-      ConnectionsGraph.new([t1, t2, t3, t4]).orders_of_separation('alberta').should ==
+      ConnectionsGraph.new([t1, t2, t3, t4]).degrees_of_separation('alberta').should ==
         [['christie']]
     end
   end
