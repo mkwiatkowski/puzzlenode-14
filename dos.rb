@@ -13,13 +13,10 @@ end
 
 class ConnectionsGraph
   def initialize(tweets)
-    mentions = tweets.inject({}) do |m, tweet|
-      m.merge(tweet.author => tweet.mentions)
-    end
-    @graph = first_order_connections(mentions)
+    @graph = first_order_connections(mentions_from_tweets(tweets))
   end
 
-  def orders(person)
+  def orders_of_separation(person)
     res = []
     people_so_far = Set.new
     r = [person]
@@ -38,6 +35,12 @@ class ConnectionsGraph
         mentions.fetch(other, []).include?(author)
       }.sort
       h.merge(author => mutual_mentions)
+    end
+  end
+
+  def mentions_from_tweets(tweets)
+    tweets.inject({}) do |m, tweet|
+      m.merge(tweet.author => tweet.mentions)
     end
   end
 
