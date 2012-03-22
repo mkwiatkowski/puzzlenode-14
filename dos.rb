@@ -54,6 +54,6 @@ class ConnectionsGraph
 
   private
   def their_first_order_connections(people)
-    people.map {|other| @connections[other]}.flatten
+    people.map {|other| @connections[other]}.compact.flatten
   end
 end
