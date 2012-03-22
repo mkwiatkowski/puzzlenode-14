@@ -37,37 +37,37 @@ describe 'Tweet' do
   end
 end
 
-describe 'Connections' do
+describe 'ConnectionsGraph' do
   it "should be initialized from empty list of tweets" do
     expect {
-      Connections.new([])
+      ConnectionsGraph.new([])
     }.should_not raise_error
   end
 
   describe "#orders" do
     it "should return empty list for empty connections" do
-      Connections.new([]).orders('bob').should == []
+      ConnectionsGraph.new([]).orders('bob').should == []
     end
 
     it "should not return people that mention someone, but doesn't get mentioned back" do
       t1 = mock(:author => 'bob', :mentions => ['christie'])
       t2 = mock(:author => 'christie', :mentions => ['alberta'])
-      Connections.new([t1, t2]).orders('bob').should == []
+      ConnectionsGraph.new([t1, t2]).orders('bob').should == []
     end
 
     it "should return people that mention each other" do
       t1 = mock(:author => 'bob', :mentions => ['christie'])
       t2 = mock(:author => 'christie', :mentions => ['bob'])
-      Connections.new([t1, t2]).orders('bob').should == [['christie']]
+      ConnectionsGraph.new([t1, t2]).orders('bob').should == [['christie']]
     end
 
     it "should return people that mentioned each other many times" do
       t1 = mock(:author => 'alberta', :mentions => ['christie'])
       t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta'])
       t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
-      Connections.new([t1, t2, t3]).orders('alberta').should == [['christie'], ['bob']]
-      Connections.new([t1, t2, t3]).orders('bob').should == [['christie'], ['alberta']]
-      Connections.new([t1, t2, t3]).orders('christie').should == [['alberta', 'bob']]
+      ConnectionsGraph.new([t1, t2, t3]).orders('alberta').should == [['christie'], ['bob']]
+      ConnectionsGraph.new([t1, t2, t3]).orders('bob').should == [['christie'], ['alberta']]
+      ConnectionsGraph.new([t1, t2, t3]).orders('christie').should == [['alberta', 'bob']]
     end
 
     it "should return all orders of separation for a given person" do
@@ -75,7 +75,7 @@ describe 'Connections' do
       t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta', 'donald'])
       t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
       t4 = mock(:author => 'donald', :mentions => ['bob'])
-      Connections.new([t1, t2, t3, t4]).orders('alberta').should ==
+      ConnectionsGraph.new([t1, t2, t3, t4]).orders('alberta').should ==
         [['christie'], ['bob'], ['donald']]
     end
 
@@ -84,7 +84,7 @@ describe 'Connections' do
       t2 = mock(:author => 'bob', :mentions => ['alberta', 'donald'])
       t3 = mock(:author => 'christie', :mentions => ['alberta'])
       t4 = mock(:author => 'donald', :mentions => ['bob'])
-      Connections.new([t1, t2, t3, t4]).orders('alberta').should ==
+      ConnectionsGraph.new([t1, t2, t3, t4]).orders('alberta').should ==
         [['christie']]
     end
   end

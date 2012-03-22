@@ -11,12 +11,12 @@ class Tweet
   end
 end
 
-class Connections
+class ConnectionsGraph
   def initialize(tweets)
     mentions = tweets.inject({}) do |m, tweet|
       m.merge(tweet.author => tweet.mentions)
     end
-    @connections = first_order_connections(mentions)
+    @graph = first_order_connections(mentions)
   end
 
   def orders(person)
@@ -42,6 +42,6 @@ class Connections
   end
 
   def their_first_order_connections(people)
-    people.map {|other| @connections[other]}.flatten
+    people.map {|other| @graph[other]}.flatten
   end
 end
