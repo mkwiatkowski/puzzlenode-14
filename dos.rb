@@ -1,3 +1,5 @@
+require 'set'
+
 class Tweet
   attr_reader :author, :mentions
 
@@ -17,16 +19,16 @@ class Connections
     @connections = first_order_connections(mentions)
   end
 
-  def order(n, person)
-    if n == 1
-      @connections[person]
-    else
-      indirect_connections(n-1, person) - order(n-1, person) - [person]
-    end
-  end
-
   def orders(person)
-    [order(1, person), order(2, person), order(3, person)]
+    res = []
+    people_so_far = Set.new
+    r = [person]
+    while true
+      people_so_far.merge(r)
+      r = their_first_order_connections(r) - people_so_far.to_a
+      r.empty? ? break : res << r
+    end
+    res
   end
 
   private
@@ -39,7 +41,7 @@ class Connections
     end
   end
 
-  def indirect_connections(n, person)
-    @connections[person].map {|other| order(n, other)}.flatten
+  def their_first_order_connections(people)
+    people.map {|other| @connections[other]}.flatten
   end
 end

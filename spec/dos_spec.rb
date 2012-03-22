@@ -44,71 +44,32 @@ describe 'Connections' do
     }.should_not raise_error
   end
 
-  describe "#order" do
-    it "should take a number and person as arguments" do
-      expect {
-        Connections.new([]).order(1, 'bob')
-      }.should_not raise_error
-    end
-
-    describe "first" do
-      it "should return empty list for empty connections" do
-        Connections.new([]).order(1, 'bob').should == []
-      end
-
-      it "should return people that mention each other" do
-        t1 = mock(:author => 'bob', :mentions => ['christie'])
-        t2 = mock(:author => 'christie', :mentions => ['bob'])
-        Connections.new([t1, t2]).order(1, 'bob').should == ['christie']
-      end
-
-      it "should not return people that mention someone, but doesn't get mentioned back" do
-        t1 = mock(:author => 'bob', :mentions => ['christie'])
-        t2 = mock(:author => 'christie', :mentions => ['alberta'])
-        Connections.new([t1, t2]).order(1, 'bob').should == []
-      end
-
-      it "should return people that mentioned each other many times" do
-        t1 = mock(:author => 'alberta', :mentions => ['christie'])
-        t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta'])
-        t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
-        Connections.new([t1, t2, t3]).order(1, 'alberta').should == ['christie']
-        Connections.new([t1, t2, t3]).order(1, 'bob').should == ['christie']
-        Connections.new([t1, t2, t3]).order(1, 'christie').should == ['alberta', 'bob']
-      end
-    end
-
-    describe "second" do
-      it "should return empty list for empty connections" do
-        Connections.new([]).order(2, 'bob').should == []
-      end
-
-      it "should return empty list when only first-order connections are present" do
-        t1 = mock(:author => 'bob', :mentions => ['christie'])
-        t2 = mock(:author => 'christie', :mentions => ['bob'])
-        Connections.new([t1, t2]).order(2, 'bob').should == []
-      end
-
-      it "should return list of people connected with first-order connections" do
-        t1 = mock(:author => 'alberta', :mentions => ['christie'])
-        t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta'])
-        t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
-        Connections.new([t1, t2, t3]).order(2, 'alberta').should == ['bob']
-      end
-    end
-
-    describe "third" do
-      it "should return list of people connected with second-order connections" do
-        t1 = mock(:author => 'alberta', :mentions => ['christie'])
-        t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta', 'donald'])
-        t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
-        t4 = mock(:author => 'donald', :mentions => ['bob'])
-        Connections.new([t1, t2, t3, t4]).order(3, 'alberta').should == ['donald']
-      end
-    end
-  end
-
   describe "#orders" do
+    it "should return empty list for empty connections" do
+      Connections.new([]).orders('bob').should == []
+    end
+
+    it "should not return people that mention someone, but doesn't get mentioned back" do
+      t1 = mock(:author => 'bob', :mentions => ['christie'])
+      t2 = mock(:author => 'christie', :mentions => ['alberta'])
+      Connections.new([t1, t2]).orders('bob').should == []
+    end
+
+    it "should return people that mention each other" do
+      t1 = mock(:author => 'bob', :mentions => ['christie'])
+      t2 = mock(:author => 'christie', :mentions => ['bob'])
+      Connections.new([t1, t2]).orders('bob').should == [['christie']]
+    end
+
+    it "should return people that mentioned each other many times" do
+      t1 = mock(:author => 'alberta', :mentions => ['christie'])
+      t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta'])
+      t3 = mock(:author => 'christie', :mentions => ['bob', 'alberta'])
+      Connections.new([t1, t2, t3]).orders('alberta').should == [['christie'], ['bob']]
+      Connections.new([t1, t2, t3]).orders('bob').should == [['christie'], ['alberta']]
+      Connections.new([t1, t2, t3]).orders('christie').should == [['alberta', 'bob']]
+    end
+
     it "should return all orders of separation for a given person" do
       t1 = mock(:author => 'alberta', :mentions => ['christie'])
       t2 = mock(:author => 'bob', :mentions => ['christie', 'alberta', 'donald'])
@@ -116,6 +77,15 @@ describe 'Connections' do
       t4 = mock(:author => 'donald', :mentions => ['bob'])
       Connections.new([t1, t2, t3, t4]).orders('alberta').should ==
         [['christie'], ['bob'], ['donald']]
+    end
+
+    it "should return only first order connections if there are all there is for a user" do
+      t1 = mock(:author => 'alberta', :mentions => ['christie'])
+      t2 = mock(:author => 'bob', :mentions => ['alberta', 'donald'])
+      t3 = mock(:author => 'christie', :mentions => ['alberta'])
+      t4 = mock(:author => 'donald', :mentions => ['bob'])
+      Connections.new([t1, t2, t3, t4]).orders('alberta').should ==
+        [['christie']]
     end
   end
 end
