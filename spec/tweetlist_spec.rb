@@ -31,13 +31,11 @@ describe TweetList do
         should == ['alice', 'celes']
     end
 
-    10000.times do |i|
-      it "should disregard tweets order #{i}" do
-        t1 = mock(:author => 'bob', :mentions => ['alice', 'celes'])
-        t2 = mock(:author => 'bob', :mentions => ['alice'])
-        TweetList.new([t1, t2]).mentions_by('bob').
-          should == ['alice', 'celes']
-      end
+    it "should disregard tweets order" do
+      t1 = mock(:author => 'bob', :mentions => ['alice', 'celes'])
+      t2 = mock(:author => 'bob', :mentions => ['alice'])
+      TweetList.new([t1, t2]).mentions_by('bob').
+        should == ['alice', 'celes']
     end
   end
 end
