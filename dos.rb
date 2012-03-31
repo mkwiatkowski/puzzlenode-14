@@ -41,6 +41,10 @@ class ConnectionsGraph
     @connections = connections
   end
 
+  def authors
+    @connections.keys
+  end
+
   def degrees_of_separation(person)
     res = []
     people_so_far = Set.new
@@ -57,4 +61,21 @@ class ConnectionsGraph
   def their_first_order_connections(people)
     people.map {|other| @connections[other]}.compact.flatten
   end
+end
+
+def main
+  tweets = File.open(ARGV[0]).readlines.map { |t| Tweet.new(t) }
+  tweetlist = TweetList.new(tweets)
+  graph = ConnectionsGraph.new(tweetlist.first_order_connections)
+  graph.authors.sort.each do |author|
+    puts author
+    graph.degrees_of_separation(author).each do |people|
+      puts(people.uniq.sort.join(', '))
+    end
+    puts
+  end
+end
+
+if __FILE__ == $0
+  main
 end
